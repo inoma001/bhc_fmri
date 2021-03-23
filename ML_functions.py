@@ -60,24 +60,6 @@ def calc_cmro2(images_dict,d_phys,d_scan_par,d_analysis):
     for i in range(datapoints-2):    
         bold_data[:,:,:,i][images_dict['M0_data']<d_analysis['M0_cut']]=0
 
-
-#    print('ASL data smoothing')
-#    import cv2
-#    for i in range(no_slices):
-#        for j in range(datapoints-2):
-#            flow_data[:,:,i,j]=cv2.GaussianBlur( flow_data[:,:,i,j],(5,5),0.75 ) #0.8 , 0.5
- 
-#    flow_data=np.nan_to_num(flow_data)
-                
-
-
-#    print('BOLD data smoothing')
-#    for i in range(no_slices):
-#        for j in range(datapoints-2):
-#            bold_data[:,:,i,j]=cv2.GaussianBlur( bold_data[:,:,i,j],(5,5),0.75 ) 
-
-#0.4 to 0.5 seems like a good sd, sd 0.8 give ASL tSNR = 4.8 and BOLD tSNR = 150
-
   
    # convert into percent signal change
     per_bold=np.empty([x_axis,y_axis,no_slices,datapoints-2]) # pre-allocate array
@@ -206,9 +188,6 @@ def calc_cmro2(images_dict,d_phys,d_scan_par,d_analysis):
             scaler=joblib.load(filename) 
             X_train_scaled=scaler.transform(ML_array)
 
-          #  with np.errstate(divide='ignore',invalid='ignore'):
-          #      OEF_vect = np.divide ( net.predict(X_train_scaled)*100 , CBF0_vect )
-
  # use CMRO2 regressor
             CMRO2_vect=net.predict(X_train_scaled)*500
             with np.errstate(divide='ignore',invalid='ignore'):
@@ -226,14 +205,10 @@ def calc_cmro2(images_dict,d_phys,d_scan_par,d_analysis):
     OEF_array[np.isinf(OEF_array)]=0   
     OEF=np.mean(OEF_array,3) 
     
-#   remove impossible answers 
-#    OEF[OEF>=1]=0
+#   limit impossible answers 
     OEF[OEF>=1]=1
     OEF[OEF<0]=0
 
-         
-#    OEF_se=np.std(OEF_array,3,ddof=1) 
-#    OEF_se[images_dict['M0_data']<d_analysis['M0_cut']]=0
     
 #   calculate CMRO2 
     OEF[images_dict['M0_data']<d_analysis['M0_cut']]=0    
@@ -243,18 +218,11 @@ def calc_cmro2(images_dict,d_phys,d_scan_par,d_analysis):
     with np.errstate(divide='ignore',invalid='ignore'):
         M = (-0.04823*CMRO2 + 0.01983*CMRO2*CMRO2) / (29.19*CBF0 + 0.9426*CBF0*CBF0)
 
-#  polynomial (5,5) equation to get M (R^2=0.9)
-
-#    M = 0.00479 - 0.002922*CBF0 + 0.001981*CMRO2 + 0.0003483*CBF0**2 - 0.0003804*CBF0*CMRO2 + 0.000107*CMRO2**2 - 6.378E-6*CBF0**3 + 4.841E-6*CBF0**2*CMRO2 + 1.074E-6*CBF0*CMRO2**2 - 1.04E-6*CMRO2**3 + 3.968E-8*CBF0**4 - 1.577E-8*CBF0**3*CMRO2 -1.675E-8*CBF0**2*CMRO2**2 + 4.216E-10*CBF0*CMRO2**3 + 4.057E-9*CMRO2**4 - 1.181E-10*CBF0**5 + 1.253E-10*CBF0**4*CMRO2 - 1.067E-10*CBF0**3*CMRO2**2 + 9.944E-11*CBF0**2*CMRO2**3 - 2.684E-11*CBF0*CMRO2**4 - 3.556E-12*CMRO2**5
-
     M[images_dict['M0_data']<d_analysis['M0_cut']]=0  
 
 # calculate Dc, O2 diffusivity from CBF0 and M (R^2 = 0.88 and RMSE = 0.33)
     Dc=0.1728 + 0.03024*CBF0 + 8.4*M - 0.0003404*CBF0*CBF0 + 1.101*CBF0*M - 36.44*M*M +4.559E-6*CBF0*CBF0*CBF0 -0.01734*CBF0*CBF0*M - 1.725*CBF0*M*M - 1.755E-8*CBF0*CBF0*CBF0*CBF0 + 6.407E-5*CBF0*CBF0*CBF0*M + 0.03734*CBF0*CBF0*M*M
 
-
-
-#    CBVv[images_dict['M0_data']<d_analysis['M0_cut']]=0   
     Dc[images_dict['M0_data']<d_analysis['M0_cut']]=0      
 
     return CMRO2, CBF0, OEF, M, Dc

@@ -71,8 +71,6 @@ def calc_cbf0(images_dict,d_phys,d_scan_par,d_analysis):
     # add in odd data points
     flow_data[:,:,:,1::2]=flow_odd[:,:,:,1::2]
 
-
-
     # surround average to get BOLD data
     bold_data=(images_dict['echo2_data'][:,:,:,1:-1]+(images_dict['echo2_data'][:,:,:,0:-2]+images_dict['echo2_data'][:,:,:,2:])/2)/2
 
