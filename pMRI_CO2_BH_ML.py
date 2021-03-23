@@ -156,9 +156,6 @@ nib.save(CMRO2_img, d_analysis['outpath'] + 'CMRO20.nii.gz')
 M_img=nib.Nifti1Image(M*brain_mask, images_dict['echo1_img'].affine, empty_header)
 nib.save(M_img, d_analysis['outpath'] + 'M.nii.gz')
 
-#CBVv_img=nib.Nifti1Image(CBVv*brain_mask, images_dict['echo1_img'].affine, empty_header)
-#nib.save(CBVv_img, d_analysis['outpath'] + 'CBVv.nii.gz')
-
 Dc_img=nib.Nifti1Image(Dc*brain_mask, images_dict['echo1_img'].affine, empty_header)
 nib.save(Dc_img, d_analysis['outpath'] + 'Dc.nii.gz')
 
@@ -197,9 +194,6 @@ os.system(cmd)
 cmd = 'fslmaths ' + d_analysis['outpath'] + 'gm_mask.nii.gz -mul ' + d_analysis['outpath'] + 'M.nii.gz ' + d_analysis['outpath'] + 'M_masked.nii.gz'
 os.system(cmd)
 
-#cmd = 'fslmaths ' + d_analysis['outpath'] + 'gm_mask.nii.gz -mul ' + d_analysis['outpath'] + 'CBVv.nii.gz ' + d_analysis['outpath'] + 'CBVv_masked.nii.gz'
-#os.system(cmd)
-
 cmd = 'fslmaths ' + d_analysis['outpath'] + 'gm_mask.nii.gz -mul ' + d_analysis['outpath'] + 'Dc.nii.gz ' + d_analysis['outpath'] + 'Dc_masked.nii.gz'
 os.system(cmd)
 
@@ -216,22 +210,5 @@ cmd = 'fslstats ' + d_analysis['outpath'] + 'CMRO20_masked.nii.gz -M'
 os.system(cmd)
 cmd = 'fslstats ' + d_analysis['outpath'] + 'M_masked.nii.gz -M'
 os.system(cmd)
-#cmd = 'fslstats ' + d_analysis['outpath'] + 'CBVv_masked.nii.gz -M'
-#os.system(cmd)
 cmd = 'fslstats ' + d_analysis['outpath'] + 'Dc_masked.nii.gz -M'
 os.system(cmd)
-
-# cmd = 'fslstats ' + d_analysis['outpath'] + 'CBF0_orig_masked.nii.gz -M'
-# os.system(cmd)
-
-
-cmd = 'fslmaths ' + d_analysis['outpath'] + 'hr_gm_mask.nii.gz -mul ' + d_analysis['outpath'] + 'OEF0_hr.nii.gz ' + d_analysis['outpath'] + 'OEF0_hr_masked.nii.gz'
-os.system(cmd)
-cmd = 'fslmaths ' + d_analysis['outpath'] + 'hr_gm_mask.nii.gz -mul ' + d_analysis['outpath'] + 'CBF0_hr.nii.gz ' + d_analysis['outpath'] + 'CBF0_hr_masked.nii.gz'
-os.system(cmd)
-cmd = 'fslmaths ' + d_analysis['outpath'] + 'hr_gm_mask.nii.gz -mul ' + d_analysis['outpath'] + 'CMRO20_hr.nii.gz ' + d_analysis['outpath'] + 'CMRO20_hr_masked.nii.gz'
-os.system(cmd)
-
-
-
-
