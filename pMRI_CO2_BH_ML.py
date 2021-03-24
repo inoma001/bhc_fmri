@@ -87,7 +87,7 @@ except Exception as error:
         print(error)
         raise SystemExit(0)
 
-mask_data[:,:,0:5]=0 # set cerebellum slices to zero in mask (removes low PLD data)
+# mask_data[:,:,0:5]=0 # set cerebellum slices to zero in mask (removes low PLD data)
 
 # save mask
 empty_header=nib.Nifti1Header()
