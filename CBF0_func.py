@@ -124,7 +124,7 @@ def calc_cbf0(images_dict,d_phys,d_scan_par,d_analysis):
     PLD_vect=np.linspace(d_scan_par['PLD'],d_scan_par['PLD']+no_slices*d_scan_par['slice_delay'], num=no_slices)
     PLD_mat=np.tile(PLD_vect, (x_axis,y_axis,1))
 
-    array_elements=15;
+    array_elements=15
     ML_array=np.empty([x_axis,y_axis,no_slices,3+2*array_elements])
     ML_array[:,:,:,0]=d_phys['Hb']
     ML_array[:,:,:,1]=d_phys['CaO20']

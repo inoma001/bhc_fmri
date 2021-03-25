@@ -107,7 +107,7 @@ def calc_cmro2(images_dict,d_phys,d_scan_par,d_analysis):
     PLD_vect=np.linspace(d_scan_par['PLD'],d_scan_par['PLD']+no_slices*d_scan_par['slice_delay'], num=no_slices)
     PLD_mat=np.tile(PLD_vect, (x_axis,y_axis,1))
 
-    array_elements=15;
+    array_elements=15
     ML_array=np.empty([x_axis,y_axis,no_slices,3+2*array_elements])
     ML_array[:,:,:,0]=d_phys['Hb']
     ML_array[:,:,:,1]=d_phys['CaO20']
@@ -117,11 +117,10 @@ def calc_cmro2(images_dict,d_phys,d_scan_par,d_analysis):
 
     ML_array=np.reshape(ML_array,(x_axis*y_axis*no_slices, 3+2*array_elements))
 
-  
-    filename='CBF0_lightGBM_no_noise_50k_model.pkl'
+    filename='CBF0_lightGBM_no_noise_50K_model.pkl'
     net=joblib.load(filename)  
-    filename='CBF0_lightGBM_no_noise_50k_scaler.pkl'
-    scaler=joblib.load(filename)
+    filename='CBF0_lightGBM_no_noise_50K_scaler.pkl'
+    scaler=joblib.load(filename) 
 
     X_train_scaled=scaler.transform(ML_array)
    
@@ -132,7 +131,7 @@ def calc_cmro2(images_dict,d_phys,d_scan_par,d_analysis):
     CBF0[CBF0>250]=250
     CBF0[images_dict['M0_data']<d_analysis['M0_cut']]=0
 
-    array_elements=15;
+    array_elements=15
     ML_array=np.empty([x_axis,y_axis,no_slices,3+2*array_elements -1])
     ML_array[:,:,:,0]=d_phys['Hb']
     ML_array[:,:,:,1]=d_phys['CaO20']
