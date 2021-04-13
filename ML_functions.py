@@ -214,8 +214,11 @@ def calc_cmro2(images_dict,d_phys,d_scan_par,d_analysis):
     CMRO2=OEF*39.34*d_phys['CaO20']*CBF0
 
 #  rational equation solution from CBF0 and CMRO2 to M (estimate with R^2=0.9)
+#    with np.errstate(divide='ignore',invalid='ignore'):
+#        M = (-0.04823*CMRO2 + 0.01983*CMRO2*CMRO2) / (29.19*CBF0 + 0.9426*CBF0*CBF0)
+
     with np.errstate(divide='ignore',invalid='ignore'):
-        M = (-0.04823*CMRO2 + 0.01983*CMRO2*CMRO2) / (29.19*CBF0 + 0.9426*CBF0*CBF0)
+        M = (8.532*CMRO2 + 2.19*CMRO2*CMRO2) / (4167*CBF0 + 25.82*CBF0*CBF0)        
 
     M[images_dict['M0_data']<d_analysis['M0_cut']]=0  
 
